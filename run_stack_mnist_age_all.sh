@@ -1,0 +1,1 @@
+python train.py --batch_size 64 --image_size 28 --dataset mnist_stack --data_dir '.../data/mnist_stacked/dataset.npy' --latent_dim 8 --lr 1e-4 --dis_fc_size 256 --dec_dist implicit --div all --n_epochs 50 --sample_every_epoch 5 --sample_every 2000

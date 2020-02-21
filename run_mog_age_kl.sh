@@ -1,0 +1,1 @@
+python train.py --batch_size 800 --n_epochs 300 --save_model_every 15 --sample_every_epoch 5 --latent_dim 2 --dataset mog --save_n_samples 5000 --dec_dist gaussian --print_every 10 --d_steps_per_iter 30 --div kl --mog_imbalance --mog_base 3 --sample_every 20
