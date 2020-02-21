@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 ## Run
 
-- Train a bidirectional generative model (BGM) using *AGE-ALL* on Stacked MNIST:
+- Train a bidirectional generative model (BGM) using *AGE-KL* on MoG:
 ```
 sh run_mog_age_kl.sh
 ```
