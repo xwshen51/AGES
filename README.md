@@ -1,6 +1,6 @@
 # Bidirectional Generative Modeling Using Adversarial Gradient Estimation
 
-This repository contains the code for the paper *Bidirectional Generative Modeling Using Adversarial Gradient Estimation*.
+This repository contains the code for the paper [*Bidirectional Generative Modeling Using Adversarial Gradient Estimation*](https://arxiv.org/abs/2002.09161).
 
 ## Install prerequisites
 ```
