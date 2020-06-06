@@ -15,27 +15,27 @@ pip install -r requirements.txt
 
 ## Run
 
-- Train a bidirectional generative model (BGM) using *AGE-KL* on MoG:
+- Train a bidirectional generative model (BGM) using *AGES-ALL* on Stacked MNIST:
 ```
 sh run_mog_age_kl.sh
 ```
-- Train a BGM using *AGE-ALL* on Stacked MNIST:
+- Train a BGM using *AGES-KL* on MoG:
 ```
 sh run_stack_mnist_age_all.sh
 ```
-- Train a BGM using *AGE-ALL* on CelebA:
+- Train a BGM using *AGES-ALL* on CelebA:
 ```
 sh run_celeba_age_all.sh
 ```
-- Train a BGM using *AGE-ALL* on ImageNet:
+- Train a BGM using *AGES-ALL* on ImageNet:
 ```
-sh run_imagenet_age_all.sh
+sh run_imagenet.sh
 ```
-- Train a BGM using *AGE-KL* with *scaling clipping* on CelebA:
+- Train a BGM using *AGES-KL* with *scaling clipping* on CelebA:
 ```
 sh run_celeba_age_kl_sc.sh
 ```
-- Train a unidirectional model using *AGE-ALL* on CelebA:
+- Train a unidirectional model using *AGES-ALL* on CelebA:
 ```
 sh run_celeba_uni_age_all.sh
 ```
