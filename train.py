@@ -197,16 +197,26 @@ def train_age(epoch, model, discriminator, encoder_optimizer, decoder_optimizer,
                     upper = 1 / args.scale_lower if args.scale_upper is None else args.scale_upper
                     r_encoder = r_encoder.clamp(args.scale_lower, upper)
 
-                if args.div == 'revkl':
-                    s_encoder = 1 / r_encoder
-                elif args.div == 'js':
-                    s_encoder = 1 / (1 + r_encoder)
-                elif args.div == 'hellinger':
-                    s_encoder = 1 / (2 * torch.sqrt(r_encoder))
+                    if args.div == 'revkl':
+                        s_encoder = 1 / r_encoder
+                    elif args.div == 'js':
+                        s_encoder = 1 / (1 + r_encoder)
+                    elif args.div == 'hellinger':
+                        s_encoder = 1 / (2 * torch.sqrt(r_encoder))
+                    else:
+                        assert args.div in ['all', 'kl']
+                        s_encoder = r_encoder.new_ones(r_encoder.shape)
+                    loss_encoder = (s_encoder * encoder_score).mean()
                 else:
-                    assert args.div in ['all', 'kl']
-                    s_encoder = r_encoder.new_ones(r_encoder.shape)
-                loss_encoder = (s_encoder * encoder_score).mean()
+                    if args.div == 'revkl':
+                        loss_encoder = -torch.exp(-encoder_score).mean()
+                    elif args.div == 'js':
+                        loss_encoder = -F.softplus(-encoder_score).mean()
+                    elif args.div == 'hellinger':
+                        loss_encoder = -torch.exp(-encoder_score / 2).mean()
+                    else:
+                        assert args.div in ['all', 'kl']
+                        loss_encoder = encoder_score.mean()
 
                 loss_encoder.backward()
                 encoder_optimizer.step()
@@ -225,16 +235,26 @@ def train_age(epoch, model, discriminator, encoder_optimizer, decoder_optimizer,
                 upper = 1 / args.scale_lower if args.scale_upper is None else args.scale_upper
                 r_decoder = r_decoder.clamp(args.scale_lower, upper)
 
-            if args.div == 'kl':
-                s_decoder = r_decoder
-            elif args.div == 'js':
-                s_decoder = r_decoder / (r_decoder + 1)
-            elif args.div == 'hellinger':
-                s_decoder = torch.sqrt(r_decoder) / 2
+                if args.div == 'kl':
+                    s_decoder = r_decoder
+                elif args.div == 'js':
+                    s_decoder = r_decoder / (r_decoder + 1)
+                elif args.div == 'hellinger':
+                    s_decoder = torch.sqrt(r_decoder) / 2
+                else:
+                    assert args.div in ['all', 'revkl']
+                    s_decoder = r_decoder.new_ones(r_decoder.shape)
+                loss_decoder = -(s_decoder * decoder_score).mean()
             else:
-                assert args.div in ['all', 'revkl']
-                s_decoder = r_decoder.new_ones(r_decoder.shape)
-            loss_decoder = -(s_decoder * decoder_score).mean()
+                if args.div == 'kl':
+                    loss_decoder = -torch.exp(decoder_score).mean()
+                elif args.div == 'js':
+                    loss_decoder = -F.softplus(decoder_score).mean()
+                elif args.div == 'hellinger':
+                    loss_decoder = -torch.exp(decoder_score / 2).mean()
+                else:
+                    assert args.div in ['all', 'revkl']
+                    loss_decoder = -decoder_score.mean()
 
             loss_decoder.backward()
             decoder_optimizer.step()
